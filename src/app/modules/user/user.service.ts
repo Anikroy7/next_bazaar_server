@@ -25,6 +25,54 @@ const createAdminIntoDB = async (payload: any) => {
     return result
 }
 
-export const UserService = {
-    createAdminIntoDB
+
+
+const createVendorIntoDB = async (payload: any) => {
+    const { password, ...vendorData } = payload;
+    const hashedPassword: string = await bcyrpt.hash(payload.password, 10);
+    const userData = {
+        email: vendorData.email,
+        password: hashedPassword,
+        role: UserRole.VENDOR
+    }
+    const result = await prisma.$transaction(async (transictionClient) => {
+        await transictionClient.user.create({
+            data: userData
+        })
+
+        const createdVendorData = await transictionClient.vendor.create({
+            data: vendorData
+        })
+        return createdVendorData
+    })
+
+    return result
+}
+
+const createCustomerIntoDB = async (payload: any) => {
+    const { password, ...customerData } = payload;
+    const hashedPassword: string = await bcyrpt.hash(payload.password, 10);
+    const userData = {
+        email: customerData.email,
+        password: hashedPassword,
+        role: UserRole.CUSTOMER
+    }
+    const result = await prisma.$transaction(async (transictionClient) => {
+        await transictionClient.user.create({
+            data: userData
+        })
+
+        const createdCustomerData = await transictionClient.customer.create({
+            data: customerData
+        })
+        return createdCustomerData
+    })
+
+    return result
+}
+
+export const UserServices = {
+    createAdminIntoDB,
+    createVendorIntoDB,
+    createCustomerIntoDB
 }
