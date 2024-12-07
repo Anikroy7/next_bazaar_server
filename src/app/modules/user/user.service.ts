@@ -27,8 +27,6 @@ const createAdminIntoDB = async (payload: any) => {
     return result
 }
 
-
-
 const createVendorIntoDB = async (payload: any) => {
     const { password, ...vendorData } = payload;
     const hashedPassword: string = await bcyrpt.hash(payload.password, 10);
@@ -87,9 +85,43 @@ const getMyInfoFromDB = async (payload: any) => {
     }
 }
 
+const updateAdminIntoDB = async (userInfo: any, payload: any) => {
+    const user = userInfo.user;
+    const result = await prisma.admin.update(
+        {
+            where: { email: user.email },
+            data: payload
+        }
+    )
+    return result
+}
+const updateVendorIntoDB = async (userInfo: any, payload: any) => {
+    const user = userInfo.user;
+    const result = await prisma.vendor.update(
+        {
+            where: { email: user.email },
+            data: payload
+        }
+    )
+    return result
+}
+const updateCustomerIntoDB = async (userInfo: any, payload: any) => {
+    const user = userInfo.user;
+    const result = await prisma.customer.update(
+        {
+            where: { email: user.email },
+            data: payload
+        }
+    )
+    return result
+}
+
 export const UserServices = {
     createAdminIntoDB,
     createVendorIntoDB,
     createCustomerIntoDB,
-    getMyInfoFromDB
+    getMyInfoFromDB,
+    updateAdminIntoDB,
+    updateVendorIntoDB,
+    updateCustomerIntoDB
 }

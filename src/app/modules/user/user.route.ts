@@ -1,8 +1,9 @@
 import express from "express";
 import { UserControllers } from "./user.controller";
 import validateRequest from "../../middlewares/validateRequest";
-import { createAdminValidationSchema, createCustomerValidationSchema, createVendorValidationSchema } from "./user.validation";
+import { createAdminValidationSchema, createCustomerValidationSchema, createVendorValidationSchema, updateAdminValidationSchema, updateCustomerValidationSchema, updateVendorValidationSchema } from "./user.validation";
 import auth from "../../middlewares/auth";
+import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
@@ -20,10 +21,26 @@ router.post('/create-customer',
 )
 
 router.get('/me',
-  auth("ADMIN", "CUSTOMER", "VENDOR"),
+  auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR),
   UserControllers.getMyInfo
 )
 
+
+router.patch('/update-admin',
+  auth(UserRole.ADMIN),
+  validateRequest(updateAdminValidationSchema),
+  UserControllers.updateAdmin
+)
+router.patch('/update-vendor',
+  auth(UserRole.ADMIN, UserRole.VENDOR),
+  validateRequest(updateVendorValidationSchema),
+  UserControllers.updateVendor
+)
+router.patch('/update-customer',
+  auth(UserRole.ADMIN, UserRole.CUSTOMER),
+  validateRequest(updateCustomerValidationSchema),
+  UserControllers.updateCustomer
+)
 
 
 export const UsersRoutes = router;

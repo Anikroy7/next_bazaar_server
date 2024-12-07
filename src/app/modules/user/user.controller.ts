@@ -43,6 +43,34 @@ const getMyInfo = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateAdmin = catchAsync(async (req, res) => {
+  const result = await UserServices.updateAdminIntoDB(req, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Admin updated successfully",
+    data: result,
+  });
+});
+
+const updateVendor = catchAsync(async (req, res) => {
+  const result = await UserServices.updateVendorIntoDB(req, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Vendor updated successfully",
+    data: result,
+  });
+});
+const updateCustomer = catchAsync(async (req, res) => {
+  const result = await UserServices.updateCustomerIntoDB(req, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Customer updated successfully",
+    data: result,
+  });
+});
 
 
 
@@ -51,5 +79,8 @@ export const UserControllers = {
   createAdmin,
   createVendor,
   createCustomer,
-  getMyInfo
+  getMyInfo,
+  updateAdmin,
+  updateVendor,
+  updateCustomer
 };
