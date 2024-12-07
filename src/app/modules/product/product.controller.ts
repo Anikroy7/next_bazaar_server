@@ -51,12 +51,11 @@ const updateProduct = catchAsync(async (req, res) => {
 
 const deleteProduct = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await ProductServices.deleteProductFromDB(id);
+ await ProductServices.deleteProductFromDB(id);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "Products deleted successfully",
-    data: result,
   });
 });
 

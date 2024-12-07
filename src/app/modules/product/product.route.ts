@@ -18,15 +18,17 @@ router.post(
   ProductControllers.createProduct
 );
 router.get("/", ProductControllers.getProducts);
+
 router.get("/:id",
   ProductControllers.getSingleProduct
 );
-router.put(
+router.patch(
   "/:id",
   auth(UserRole.VENDOR, UserRole.ADMIN),
   validateRequest(updateProductValidationSchema),
   ProductControllers.updateProduct
 );
+
 router.delete("/:id",
   auth(UserRole.VENDOR, UserRole.ADMIN),
   ProductControllers.deleteProduct

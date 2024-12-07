@@ -4,6 +4,7 @@ import { prisma } from "../../types/global";
 import { Product } from "@prisma/client";
 
 const createProductIntoDB = async (payload: Product) => {
+  console.log(payload)
   const newProduct = await prisma.product.create({
     data: payload
   });
@@ -67,11 +68,10 @@ const deleteProductFromDB = async (_id: string) => {
       "This product is already deleted!!"
     );
   }
-  const result = await prisma.product.update({
+  await prisma.product.update({
     where: { id: parseInt(_id) },
-    data: { isDeleted: false }
+    data: { isDeleted: true }
   });
-  return result;
 };
 
 

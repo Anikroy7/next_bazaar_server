@@ -90,6 +90,7 @@ model Category {
 model Product {
   id            Int      @id @default(autoincrement())
   name          String
+  description   String
   categoryId    Int
   category      Category @relation(fields: [categoryId], references: [id])
   vendorId      Int
@@ -97,6 +98,7 @@ model Product {
   inventorCount Int
   images        String[]
   discount      Int
+  price         Int
   isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
