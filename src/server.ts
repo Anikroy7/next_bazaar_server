@@ -1,10 +1,16 @@
 import { Color } from "colors";
 import app from "./app";
+import config from "./app/config";
 var colors: Color = require('colors');
 
-const port = 3000;
 
-app.listen(port, () => {
-
-    console.log(`Next bazaar server is runing at port ${port}`.green.underline)
-})
+async function main() {
+  try {
+    app.listen(config.port, () => {
+      console.log(`app listening on port ${config.port}`.green.underline.bold);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+main();
