@@ -45,18 +45,19 @@ model Admin {
 }
 
 model Vendor {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
   name          String
   phone         String
   logo          String
   description   String
   location      String
-  isBlacklisted Boolean  @default(false)
-  isDeleted     Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [email], references: [email])
+  isBlacklisted Boolean   @default(false)
+  isDeleted     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [email], references: [email])
+  product       Product[]
 
   @@map("vendors")
 }
@@ -75,6 +76,32 @@ model Customer {
   user User @relation(fields: [email], references: [email])
 
   @@map("customers")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  isDeleted Boolean   @default(false)
+  product   Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
+  vendorId      Int
+  vendor        Vendor   @relation(fields: [vendorId], references: [id])
+  inventorCount Int
+  images        String[]
+  discount      Int
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("products")
 }
 
 enum UserRole {
