@@ -34,8 +34,22 @@ const createCustomer = catchAsync(async (req, res) => {
   });
 });
 
+const getMyInfo = catchAsync(async (req, res) => {
+  const result = await UserServices.getMyInfoFromDB(req)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User retrieved successfully",
+    data: result,
+  });
+});
+
+
+
+
 export const UserControllers = {
   createAdmin,
   createVendor,
-  createCustomer
+  createCustomer,
+  getMyInfo
 };

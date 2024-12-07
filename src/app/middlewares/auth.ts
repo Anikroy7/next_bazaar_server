@@ -4,9 +4,10 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import AppError from "../errors/AppError";
 import catchAsync from "../utils/catchAsync";
-import { TUserRole } from "../modules/user/user.interface";
+import { UserRole } from "@prisma/client";
+import { prisma } from "../types/global";
 
-const auth = (...requiredRoles: TUserRole[]) => {
+const auth = (...requiredRoles: UserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1];
     // checking if the token is missing
@@ -23,14 +24,15 @@ const auth = (...requiredRoles: TUserRole[]) => {
       config.jwt_access_secret as string,
     ) as JwtPayload;
 
-    const { role, userId } = decoded;
-
+    const { role, email } = decoded;
     // checking if the user is exist
-    // const user = await User.findById(userId);
+    const user = await prisma.user.findUnique({
+      where: { email: email }
+    });
 
-    // if (!user) {
-    //   throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
-    // }
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
+    }
 
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(

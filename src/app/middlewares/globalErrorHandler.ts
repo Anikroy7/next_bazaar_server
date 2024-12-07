@@ -23,7 +23,10 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
     }
     else if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2002') {
-            message = "User already exits";
+            message = err.message;
+            error = err.meta;
+        } else if (err.code === "P2025") {
+            message = "Data not found!";
             error = err.meta;
         }
     } else if (err instanceof ZodError) {

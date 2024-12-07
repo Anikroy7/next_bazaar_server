@@ -13,7 +13,7 @@ import { prisma } from "../../types/global";
 
 const loginUser = async (payload: TLoginUser) => {
   //if the user is exist
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { email: payload.email }
   })
 

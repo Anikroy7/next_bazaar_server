@@ -1,5 +1,5 @@
 import express from "express";
-import validateRequest from "../../middlewares/validateRequest";
+import validateRequest, { validateRequestCookies } from "../../middlewares/validateRequest";
 
 import { AuthValidation } from "../auth/auth.validation";
 import { AuthControllers } from "../auth/auth.controller";
@@ -25,7 +25,7 @@ router.post(
 
 router.post(
   '/refresh-token',
-  // validateRequestCookies(AuthValidation.refreshTokenValidationSchema),
+  validateRequestCookies(AuthValidation.refreshTokenValidationSchema),
   AuthControllers.refreshToken
 );
 

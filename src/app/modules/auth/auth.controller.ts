@@ -6,14 +6,15 @@ import { AuthServices } from "./auth.service";
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
   const { accessToken, refreshToken } = result;
-
+  res.cookie('refreshToken', refreshToken, {
+    secure: false,
+    httpOnly: true
+  })
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "User logged in successfully",
     accessToken,
-    refreshToken,
-
   });
 });
 const forgetPassword = catchAsync(async (req, res) => {
@@ -39,7 +40,7 @@ const resetPassword = catchAsync(async (req, res) => {
 
 
 const refreshToken = catchAsync(async (req, res) => {
-  const token = req.headers.cookie?.split(" ")[1] as string;
+  const token = req.headers.cookie?.split("=")[1] as string;
   const result = await AuthServices.refreshToken(token);
 
   sendResponse(res, {
