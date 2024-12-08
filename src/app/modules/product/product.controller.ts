@@ -15,6 +15,7 @@ const createProduct = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 const getProducts = catchAsync(async (req, res) => {
   const result = await ProductServices.getProductsFromDB();
   sendResponse(res, {
