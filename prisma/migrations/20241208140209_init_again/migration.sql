@@ -96,7 +96,8 @@ CREATE TABLE "reviews" (
     "id" SERIAL NOT NULL,
     "customerId" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
-    "ratings" TEXT NOT NULL,
+    "ratings" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

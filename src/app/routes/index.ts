@@ -3,8 +3,9 @@ import { AuthRoutes } from "../modules/auth/auth.route";
 import { UsersRoutes } from "../modules/user/user.route";
 import { CategoryRoutes } from "../modules/category/category.route";
 import { ProductsRoutes } from "../modules/product/product.route";
-import {  ProductReviewRoutes } from "../modules/productReview/productReview.route";
+import { ProductReviewRoutes } from "../modules/productReview/productReview.route";
 import { VendorReviewRoutes } from "../modules/vendorReview/vendorReview.route";
+import { VendorFollowRoutes } from "../modules/vendorFollow/vendorFollow.route";
 
 
 
@@ -34,6 +35,10 @@ const moduleRoutes = [
   {
     path: "/vendorReviews",
     route: VendorReviewRoutes,
+  },
+  {
+    path: "/vendorFollwers",
+    route: VendorFollowRoutes,
   },
     
 ];
