@@ -19,7 +19,7 @@ export const makePayment = async (paymentInfo: TPaymentInfo) => {
     const response = await axios.post('https://​sandbox​.aamarpay.com/jsonpost.php', {
         "store_id": `${config.storeId}`,
         "tran_id": paymentInfo.transactionId,
-        "success_url": `${config.client_base_url}/api/payment/confirm?tran_id=${paymentInfo.transactionId}&orderId=${paymentInfo.orderId}&userId=${paymentInfo.user._id}`,
+        "success_url": `${config.server_base_url}/api/payment/confirm?tran_id=${paymentInfo.transactionId}&orderId=${paymentInfo.orderId}&userId=${paymentInfo.user._id}`,
         "fail_url": "http://www.merchantdomain.com/faile dpage.html",
         "cancel_url": "http://www.merchantdomain.com/can cellpage.html",
         "amount": paymentInfo.totalPrice,

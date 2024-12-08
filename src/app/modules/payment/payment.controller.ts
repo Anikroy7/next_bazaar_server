@@ -3,12 +3,12 @@ import { PaymentServices } from "./payment.service";
 import config from "../../config";
 
 const createPayment = catchAsync(async (req, res) => {
-    const _id = req.query.orderId;
-    const userId = req.query.userId;
-    const tran_id = req.query.tran_id;
-
-    await PaymentServices.caretePaymentIntoDB({ _id, userId, tran_id })
-    res.send(`
+  const _id = req.query.orderId;
+  const userId = req.query.userId;
+  const tran_id = req.query.tran_id;
+  
+  await PaymentServices.caretePaymentIntoDB({ _id, userId, tran_id })
+  res.send(`
       
         <html>
       <head>
@@ -64,5 +64,5 @@ const createPayment = catchAsync(async (req, res) => {
 });
 
 export const PaymentController = {
-    createPayment
+  createPayment
 }
