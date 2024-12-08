@@ -60,6 +60,7 @@ model Vendor {
   product       Product[]
   vendorReview  VendorReview[]
   vendorFollow  VendorFollow[]
+  urder         Order[]
 
   @@map("vendors")
 }
@@ -78,6 +79,7 @@ model Customer {
   user         User           @relation(fields: [email], references: [email])
   Review       Review[]
   vendorFollow VendorFollow[]
+  order        Order[]
 
   @@map("customers")
 }
@@ -107,6 +109,7 @@ model Product {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   productReview ProductReview[]
+  orderProduct  OrderProduct[]
 
   @@map("products")
 }
@@ -156,6 +159,52 @@ model VendorFollow {
   customer   Customer @relation(fields: [customerId], references: [id])
 
   @@id([vendorId, customerId])
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  vendorId Int
+  vendor   Vendor @relation(fields: [vendorId], references: [id])
+
+  totalQunatity   Int
+  totalPrice      Int
+  customerName    String
+  customerEmail   String
+  customerAddress String
+  paymentStatus   PaymentStatus
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  orderProduct    OrderProduct[]
+  payment         Payment?
+}
+
+model OrderProduct {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  orderId       Int           @unique
+  order         Order         @relation(fields: [orderId], references: [id])
+  paymentStatus PaymentStatus
+  transactionId String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  FAILED
+  SUCCESS
+  CANCELED
 }
 
 enum UserRole {

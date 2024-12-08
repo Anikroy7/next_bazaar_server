@@ -6,6 +6,8 @@ import { ProductsRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/productReview/productReview.route";
 import { VendorReviewRoutes } from "../modules/vendorReview/vendorReview.route";
 import { VendorFollowRoutes } from "../modules/vendorFollow/vendorFollow.route";
+import { OrderRoutes } from "../modules/order/order.route";
+import { PaymentRoutes } from "../modules/payment/payment.route";
 
 
 
@@ -37,8 +39,16 @@ const moduleRoutes = [
     route: VendorReviewRoutes,
   },
   {
-    path: "/vendorFollwers",
+    path: "/vendorFollowers",
     route: VendorFollowRoutes,
+  },
+  {
+    path: "/orders",
+    route: OrderRoutes,
+  },
+  {
+    path: "/payment",
+    route: PaymentRoutes,
   },
     
 ];
