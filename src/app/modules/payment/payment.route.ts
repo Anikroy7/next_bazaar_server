@@ -7,4 +7,8 @@ router.post(
   "/confirm", PaymentController.createPayment,
 );
 
+router.post(
+  "/cancel", PaymentController.cancelPayment,
+);
+
 export const PaymentRoutes = router;

@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
     secure: false, // true for port 465, false for other ports
     auth: {
         user: "anik.mysoftheaven@gmail.com",
-        pass: "yiid kxou kiqs nqax",
+        pass: "yiidkxoukiqsnqax",
     },
 });
 
@@ -14,7 +14,7 @@ export const sendEmail = async (to: string, link: string) => {
     await transporter.sendMail({
         from: "anik.mysoftheaven@gmail.com", // sender address
         to: to, // list of receivers
-        subject: "Reset Password for car rental service", // Subject line
+        subject: "Reset Password for next bazaar", // Subject line
         text: "", // plain text body
         html: `
     

@@ -26,6 +26,7 @@ const getAllVendorReviewsFromDB = async () => {
     });
     return result
 }
+
 const getSingleVendorReviewsFromDB = async (reviewId: string, vendorId: string) => {
     const pr = await prisma.vendorReview.findUnique({
         where: {

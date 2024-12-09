@@ -25,37 +25,42 @@ const createOrderIntoDB = async (payload: any) => {
   if (!vendorInfo) {
     throw new AppError(httpStatus.BAD_REQUEST, "This vendor is not exists!!");
   }
-  const transactionId = generateTransactionId();
+  try {
+    const transactionId = generateTransactionId();
 
-  const newOrder = await prisma.$transaction(async (transactionClient) => {
-    const orderInfo = await transactionClient.order.create({
-      data: orderData
-    })
-    productData.forEach(async (data: any) => {
-      await prisma.orderProduct.create({
-        data: {
-          orderId: orderInfo.id,
-          productId: data.id,
-          quantity: data.quantity
-        }
+    const newOrder = await prisma.$transaction(async (transactionClient) => {
+      const orderInfo = await transactionClient.order.create({
+        data: orderData
       })
+      productData.forEach(async (data: any) => {
+        await prisma.orderProduct.create({
+          data: {
+            orderId: orderInfo.id,
+            productId: data.id,
+            quantity: data.quantity
+          }
+        })
+      });
+      return orderInfo
     });
-    return orderInfo
-  });
-  const paymentInfo = {
-    transactionId,
-    totalPrice: orderData.totalPrice,
-    user: {
-      _id: userInfo.id,
-      name: userInfo.name,
-      email: userInfo.email,
-      address: userInfo.address,
-      phone: userInfo.phone
-    },
-    orderId: newOrder.id,
+    const paymentInfo = {
+      transactionId,
+      totalPrice: orderData.totalPrice,
+      user: {
+        _id: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+        address: userInfo.address,
+        phone: userInfo.phone
+      },
+      orderId: newOrder.id,
+    }
+    const response = await makePayment(paymentInfo);
+    return response.data.payment_url;
+  } catch (error: any) {
+    throw new AppError(httpStatus.BAD_REQUEST, error?.message);
+
   }
-  const response = await makePayment(paymentInfo);
-  return response.data.payment_url;
 
 };
 
