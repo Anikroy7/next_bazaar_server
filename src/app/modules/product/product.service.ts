@@ -4,7 +4,6 @@ import { prisma } from "../../types/global";
 import { Product } from "@prisma/client";
 
 const createProductIntoDB = async (payload: Product) => {
-  console.log(payload)
   const newProduct = await prisma.product.create({
     data: payload
   });

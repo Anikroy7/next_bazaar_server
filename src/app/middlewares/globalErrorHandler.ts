@@ -17,29 +17,35 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
             message: "Something went wrong",
         },
     ];
-    if (err instanceof Prisma.PrismaClientValidationError) {
-        message = 'Validation Error';
-        error = err.message
-    }
-    else if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === 'P2002') {
-            message = err.message;
-            error = err.meta;
-        } else if (err.code === "P2025") {
-            message = "Data not found!";
-            error = err.meta;
-        }
-    } else if (err instanceof ZodError) {
+    if (err instanceof ZodError) {
         const simplifiedError = handleZodError(err);
         statusCode = simplifiedError?.statusCode;
         message = simplifiedError?.message;
         errorSources = simplifiedError?.errorSources;
     }
+    else if (err instanceof Prisma.PrismaClientValidationError) {
+        message = 'Validation Error';
+        error = err.message
+    }
+    else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2002') {
+           
+            message = "User already exits with this email!!";
+            error = err.meta;
+        } 
+        if (err.code === 'P2002') {
+        } else if (err.code === "P2025") {
+            message = "Data not found!";
+            error = err.meta;
+        }
+    } 
+
 
     res.status(statusCode).json({
         success,
         message,
-        error
+        error,
+        errorSources
     })
 };
 

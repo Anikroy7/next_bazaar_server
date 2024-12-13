@@ -4,7 +4,7 @@ export const createAdminValidationSchema = z.object({
   body: z.object({
     password: z.string().max(20),
     name: z.string(),
-    profileImage: z.string(),
+    profileImage: z.string().optional(),
     email: z.string().email(),
     phone: z.string(),
     address: z.string(),
@@ -16,7 +16,7 @@ export const createCustomerValidationSchema = z.object({
   body: z.object({
     password: z.string().max(20),
     name: z.string(),
-    profileImage: z.string(),
+    profileImage: z.string().optional(),
     email: z.string().email(),
     phone: z.string(),
     address: z.string(),

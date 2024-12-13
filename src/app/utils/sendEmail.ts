@@ -44,7 +44,7 @@ export const sendEmail = async (to: string, link: string) => {
                     <tr>
                         <td style="text-align:center;">
                           <a href="https://rakeshmandal.com" title="logo" target="_blank">
-                            <img width="300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo9lsguElms4_3HsOiZYnDQjQc8iRPxN7-Qw&s" title="logo" alt="logo">
+                            <img width="50" src="https://pbs.twimg.com/profile_images/1565710214019444737/if82cpbS_400x400.jpg" title="logo" alt="logo">
                           </a>
                         </td>
                     </tr>
