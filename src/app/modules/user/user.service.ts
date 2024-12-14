@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client"
+import { UserRole, UserStatus } from "@prisma/client"
 import bcyrpt from 'bcrypt'
 import { prisma } from "../../types/global";
 import AppError from "../../errors/AppError";
@@ -84,6 +84,30 @@ const getMyInfoFromDB = async (payload: any) => {
             throw new AppError(httpStatus.BAD_REQUEST, 'User not found');
     }
 }
+const getAllCustomerFromDB = async () => {
+    const result = await prisma.user.findMany({
+        where: {
+            role: UserRole.CUSTOMER
+        },
+        include: {
+            customer: true
+        }
+    })
+    return result;
+}
+const getAllVendorFromDB = async () => {
+    const result = await prisma.user.findMany(
+        {
+            where: {
+                role: UserRole.VENDOR
+            },
+            include: {
+                customer: true
+            }
+        }
+    )
+    return result;
+}
 
 const updateAdminIntoDB = async (userInfo: any, payload: any) => {
     const user = userInfo.user;
@@ -105,9 +129,20 @@ const updateVendorIntoDB = async (userInfo: any, payload: any) => {
     )
     return result
 }
+
+const updateVendorByIdIntoDB = async (id: string, payload: any) => {
+    const result = await prisma.vendor.update(
+        {
+            where: { id: parseInt(id) },
+            data: payload
+        }
+    )
+    return result
+}
+
 const updateCustomerIntoDB = async (userInfo: any, payload: any) => {
     const user = userInfo.user;
-    const result = await prisma.customer.update(
+    const result = await prisma.user.update(
         {
             where: { email: user.email },
             data: payload
@@ -115,7 +150,43 @@ const updateCustomerIntoDB = async (userInfo: any, payload: any) => {
     )
     return result
 }
+const updateCustomerByIdIntoDB = async (id: string, payload: any) => {
+    const result = await prisma.customer.update(
+        {
+            where: { id: parseInt(id) },
+            data: payload,
+            include: {
+                user: true
+            }
+        }
+    )
+    return result
+}
 
+
+const updateStatusIntoDB = async (id: string, data: { status: UserStatus }) => {
+    const result = await prisma.user.update({
+        where: {
+            id: parseInt(id)
+        },
+        data: {
+            status: data.status
+        }
+    })
+    return result
+}
+
+const updateRoleIntoDB = async (id: string, data: { role: UserRole }) => {
+    const result = await prisma.user.update({
+        where: {
+            id: parseInt(id)
+        },
+        data: {
+            role: data.role
+        }
+    })
+    return result
+}
 export const UserServices = {
     createAdminIntoDB,
     createVendorIntoDB,
@@ -123,5 +194,11 @@ export const UserServices = {
     getMyInfoFromDB,
     updateAdminIntoDB,
     updateVendorIntoDB,
-    updateCustomerIntoDB
+    updateCustomerIntoDB,
+    updateVendorByIdIntoDB,
+    updateCustomerByIdIntoDB,
+    getAllCustomerFromDB,
+    getAllVendorFromDB,
+    updateStatusIntoDB,
+    updateRoleIntoDB
 }

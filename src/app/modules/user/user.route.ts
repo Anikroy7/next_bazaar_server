@@ -25,6 +25,17 @@ router.get('/me',
   auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR),
   UserControllers.getMyInfo
 )
+router.get('/cutomer/all',
+  auth(UserRole.ADMIN),
+  UserControllers.getAllCustomerInfo
+)
+
+router.get('/vendor/all',
+  auth(UserRole.ADMIN),
+  UserControllers.getAllVendorInfo
+)
+
+
 
 
 router.patch('/update-admin',
@@ -41,6 +52,31 @@ router.patch('/update-customer',
   auth(UserRole.ADMIN, UserRole.CUSTOMER),
   validateRequest(updateCustomerValidationSchema),
   UserControllers.updateCustomer
+)
+
+
+router.patch('/update-vendor/:id',
+  auth(UserRole.ADMIN),
+  validateRequest(updateVendorValidationSchema),
+  UserControllers.updateVendorById
+)
+
+
+
+router.patch('/update-customer/:id',
+  auth(UserRole.ADMIN),
+  validateRequest(updateCustomerValidationSchema),
+  UserControllers.updateCustomerById
+)
+
+router.patch('/update-status/:id',
+  auth(UserRole.ADMIN),
+  UserControllers.updateStatus
+)
+
+router.patch('/update-role/:id',
+  auth(UserRole.ADMIN),
+  UserControllers.updateRole  
 )
 
 

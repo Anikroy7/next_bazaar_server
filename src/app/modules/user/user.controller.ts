@@ -62,6 +62,16 @@ const updateVendor = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateVendorById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserServices.updateVendorByIdIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Vendor updated successfully",
+    data: result,
+  });
+});
 const updateCustomer = catchAsync(async (req, res) => {
   const result = await UserServices.updateCustomerIntoDB(req, req.body);
   sendResponse(res, {
@@ -71,8 +81,58 @@ const updateCustomer = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateCustomerById = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
+  const result = await UserServices.updateCustomerIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Customer updated successfully",
+    data: result,
+  });
+});
+const updateStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
+  const result = await UserServices.updateStatusIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Status updated successfully",
+    data: result,
+  });
+});
+const updateRole = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await UserServices.updateRoleIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "role updated successfully",
+    data: result,
+  });
+});
+
+const getAllCustomerInfo = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllCustomerFromDB()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Customers retrieved successfully",
+    data: result,
+  });
+});
+const getAllVendorInfo = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllVendorFromDB()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Vendoros retrieved successfully",
+    data: result,
+  });
+});
 
 
 export const UserControllers = {
@@ -82,5 +142,11 @@ export const UserControllers = {
   getMyInfo,
   updateAdmin,
   updateVendor,
-  updateCustomer
+  updateCustomer,
+  updateVendorById,
+  updateCustomerById,
+  getAllCustomerInfo,
+  getAllVendorInfo,
+  updateStatus,
+  updateRole
 };
