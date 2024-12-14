@@ -189,7 +189,6 @@ const updateRoleIntoDB = async (id: string, data: { role: UserRole }) => {
 }
 const vendorBlacklistIntoDB = async (id: string, data: { isBlacklisted: boolean }) => {
 
-    console.log('come form client', data)
     if (data.isBlacklisted) {
         await prisma.$transaction(async (prismaClient) => {
             const user = await prismaClient.user.update({
@@ -239,6 +238,24 @@ const vendorBlacklistIntoDB = async (id: string, data: { isBlacklisted: boolean 
         })
     }
 }
+
+const getSingleVendorFromDB = async (id: string) => {
+    const vendorInfo = await prisma.vendor.findUniqueOrThrow({
+        where: {
+            id: parseInt(id)
+        }
+    })
+    const vendorProducts = await prisma.product.findMany({
+        where: {
+            vendorId: vendorInfo.id
+        }
+    })
+    const vendorWithProduct = {
+        ...vendorInfo,
+        products: vendorProducts
+    }
+    return vendorWithProduct
+}
 export const UserServices = {
     createAdminIntoDB,
     createVendorIntoDB,
@@ -253,5 +270,6 @@ export const UserServices = {
     getAllVendorFromDB,
     updateStatusIntoDB,
     updateRoleIntoDB,
-    vendorBlacklistIntoDB
+    vendorBlacklistIntoDB,
+    getSingleVendorFromDB
 }

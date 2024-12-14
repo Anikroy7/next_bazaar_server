@@ -13,12 +13,18 @@ const createProductIntoDB = async (payload: Product) => {
   return newProduct;
 };
 
-const getProductsFromDB = async () => {
+const getProductsFromDB = async (vendorId: string) => {
+  const numberVendorId = parseInt(vendorId)
   const products = await prisma.product.findMany({
     where: {
-      isDeleted: false
+      isDeleted: false,
+      ...(numberVendorId && { vendorId: numberVendorId })
+    },
+    include: {
+      vendor: true
     }
   });
+
   if (products.length === 0) {
     throw new AppError(httpStatus.BAD_REQUEST, "There are not products here");
   }
@@ -27,7 +33,12 @@ const getProductsFromDB = async () => {
 };
 
 const getSingleProductFromDB = async (_id: string) => {
-  const product = await prisma.product.findUnique({ where: { id: parseInt(_id) } })
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(_id) },
+    include: {
+      vendor: true
+    }
+  })
   if (!product) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the product");
   }

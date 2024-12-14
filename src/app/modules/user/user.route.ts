@@ -25,6 +25,9 @@ router.get('/me',
   auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR),
   UserControllers.getMyInfo
 )
+router.get('/vendor/:id',
+  UserControllers.getSingleVendor
+)
 router.get('/cutomer/all',
   auth(UserRole.ADMIN),
   UserControllers.getAllCustomerInfo
@@ -76,12 +79,12 @@ router.patch('/update-status/:id',
 
 router.patch('/update-role/:id',
   auth(UserRole.ADMIN),
-  UserControllers.updateRole  
+  UserControllers.updateRole
 )
 
 router.patch('/vendor/blacklist/:id',
   auth(UserRole.ADMIN),
-  UserControllers.vendorBlackList  
+  UserControllers.vendorBlackList
 )
 
 

@@ -34,10 +34,15 @@ const updateCategoryIntoDB = async (_id: string, payload: TCategory) => {
 };
 
 const getAllCategoriesFromDB = async () => {
-    const categories = await prisma.category.findMany({});
+    const categories = await prisma.category.findMany({
+        where: {
+            isDeleted: false
+        }
+    });
     return categories;
 };
 const deleteCategoryFromDB = async (_id: string) => {
+    console.log('delte jit', _id)
     const category = await prisma.category.findUnique({ where: { id: parseInt(_id) } });
     if (!category) {
         throw new AppError(httpStatus.NOT_FOUND, "Can't find the category");

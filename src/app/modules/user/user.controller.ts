@@ -133,6 +133,17 @@ const getAllVendorInfo = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getSingleVendor = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await UserServices.getSingleVendorFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Vendoros retrieved successfully",
+    data: result,
+  });
+});
 
 const vendorBlackList = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -161,5 +172,6 @@ export const UserControllers = {
   getAllVendorInfo,
   updateStatus,
   updateRole,
-  vendorBlackList
+  vendorBlackList,
+  getSingleVendor
 };
