@@ -134,6 +134,18 @@ const getAllVendorInfo = catchAsync(async (req, res) => {
   });
 });
 
+const vendorBlackList = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await UserServices.vendorBlacklistIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Vendor blacklisted successfully",
+    data: result,
+  });
+});
+
 
 export const UserControllers = {
   createAdmin,
@@ -148,5 +160,6 @@ export const UserControllers = {
   getAllCustomerInfo,
   getAllVendorInfo,
   updateStatus,
-  updateRole
+  updateRole,
+  vendorBlackList
 };

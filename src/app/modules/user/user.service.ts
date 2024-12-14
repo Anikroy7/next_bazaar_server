@@ -102,7 +102,7 @@ const getAllVendorFromDB = async () => {
                 role: UserRole.VENDOR
             },
             include: {
-                customer: true
+                vendor: true
             }
         }
     )
@@ -187,6 +187,58 @@ const updateRoleIntoDB = async (id: string, data: { role: UserRole }) => {
     })
     return result
 }
+const vendorBlacklistIntoDB = async (id: string, data: { isBlacklisted: boolean }) => {
+
+    console.log('come form client', data)
+    if (data.isBlacklisted) {
+        await prisma.$transaction(async (prismaClient) => {
+            const user = await prismaClient.user.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    status: UserStatus.BLOCKED
+                },
+                include: {
+                    vendor: true
+                }
+            })
+
+            await prismaClient.vendor.update({
+                where: {
+                    id: user.vendor?.id
+                },
+                data: {
+                    isBlacklisted: true
+                }
+            })
+        })
+
+    } else {
+        await prisma.$transaction(async (prismaClient) => {
+            const user = await prismaClient.user.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    status: UserStatus.ACTIVE
+                },
+                include: {
+                    vendor: true
+                }
+            })
+
+            await prismaClient.vendor.update({
+                where: {
+                    id: user.vendor?.id
+                },
+                data: {
+                    isBlacklisted: false
+                }
+            })
+        })
+    }
+}
 export const UserServices = {
     createAdminIntoDB,
     createVendorIntoDB,
@@ -200,5 +252,6 @@ export const UserServices = {
     getAllCustomerFromDB,
     getAllVendorFromDB,
     updateStatusIntoDB,
-    updateRoleIntoDB
+    updateRoleIntoDB,
+    vendorBlacklistIntoDB
 }

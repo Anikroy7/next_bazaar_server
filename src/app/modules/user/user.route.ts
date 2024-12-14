@@ -79,5 +79,10 @@ router.patch('/update-role/:id',
   UserControllers.updateRole  
 )
 
+router.patch('/vendor/blacklist/:id',
+  auth(UserRole.ADMIN),
+  UserControllers.vendorBlackList  
+)
+
 
 export const UsersRoutes = router;
