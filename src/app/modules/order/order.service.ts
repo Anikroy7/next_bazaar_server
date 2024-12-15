@@ -88,16 +88,58 @@ const getMyOrderFromDB = async (payload: any) => {
       break;
   }
 
-  const myorder = await prisma.order.findMany({
+  const myOrders = await prisma.order.findMany({
     where: {
       customerId: userInfo.id,
     },
-    include: {
-      customer: true
-    }
   });
-  return myorder
 
+  if (myOrders.length > 0) {
+    const orderIds = myOrders.map((order) => order.id);
+
+    const orderedProducts = await prisma.orderProduct.findMany({
+      where: {
+        orderId: {
+          in: orderIds,
+        },
+      },
+      include: {
+        product: true,
+      },
+    });
+
+    const paymentData = await prisma.payment.findMany({
+      where: {
+        orderId: {
+          in: orderIds,
+        },
+      },
+    });
+
+    const ordersWithDetails = myOrders.map((order) => {
+      const products = orderedProducts.filter(
+        (op) => op.orderId === order.id
+      );
+      const payment = paymentData.find(
+        (payment) => payment.orderId === order.id
+      );
+
+      return {
+        ...order,
+        products: products.map((p) => ({
+          id: p.product.id,
+          name: p.product.name,
+          price: p.product.price,
+          quantity: p.quantity,
+        })),
+        payment: payment || null,
+      };
+    });
+
+    return ordersWithDetails;
+  } else {
+    return [];
+  }
 };
 
 const getOrderFromDB = async (_id: string) => {
@@ -125,7 +167,6 @@ const updateOrderIntoDB = async (_id: string, payload: Order) => {
   return updatedOrder;
 };
 
-// const user = aqait user find .one 
 
 export const OrderServices = {
   createOrderIntoDB,

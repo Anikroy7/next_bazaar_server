@@ -16,7 +16,7 @@ const loginUser = async (payload: TLoginUser) => {
   const user = await prisma.user.findUnique({
     where: { email: payload.email },
   })
-
+  console.log('froim client', user)
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "Invalid crediantial!");
   }

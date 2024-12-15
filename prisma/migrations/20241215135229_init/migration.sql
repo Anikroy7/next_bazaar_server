@@ -71,6 +71,7 @@ CREATE TABLE "customers" (
 CREATE TABLE "categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -85,7 +86,7 @@ CREATE TABLE "products" (
     "vendorId" INTEGER NOT NULL,
     "inventorCount" INTEGER NOT NULL,
     "images" TEXT[],
-    "discount" INTEGER NOT NULL,
+    "discount" INTEGER NOT NULL DEFAULT 0,
     "price" INTEGER NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -141,7 +142,6 @@ CREATE TABLE "Order" (
     "customerName" TEXT NOT NULL,
     "customerEmail" TEXT NOT NULL,
     "customerAddress" TEXT NOT NULL,
-    "paymentStatus" "PaymentStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
