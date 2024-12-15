@@ -10,9 +10,9 @@ const router = express.Router();
 
 router.post('/', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(createProductReviewValidationSchema), ProductReviewController.createProductReview)
 router.get('/', auth(UserRole.ADMIN), ProductReviewController.getAllProductReview)
-router.get('/:productId/:reviewId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.getProductReview)
-router.patch('/:productId/:reviewId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.updateProductReview)
-router.delete('/:productId/:reviewId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.deleteProductReview)
+router.get('/:productId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.getProductReview)
+router.patch('/:reviewId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.updateProductReview)
+router.delete('/:reviewId', auth(UserRole.ADMIN, UserRole.CUSTOMER), ProductReviewController.deleteProductReview)
 
 
 export const ProductReviewRoutes = router;

@@ -26,13 +26,10 @@ const getAllProductReviewsFromDB = async () => {
     });
     return result
 }
-const getSingleProductReviewsFromDB = async (reviewId: string, productId: string) => {
-    const pr = await prisma.productReview.findUnique({
+const getSingleProductReviewsFromDB = async (productId: string) => {
+    const pr = await prisma.productReview.findMany({
         where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
-            }
+            productId: parseInt(productId)
         },
         include: {
             review: true
@@ -44,48 +41,31 @@ const getSingleProductReviewsFromDB = async (reviewId: string, productId: string
     return pr;
 }
 
-const updateProductReviewIntoDB = async (reviewId: string, productId: string, payload: Review) => {
-    const pr = await prisma.productReview.findUnique({
-        where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
-            }
-        }
-    });
-    if (!pr) {
-        throw new AppError(httpStatus.NOT_FOUND, "Can't find the product reivew!");
-    }
+const updateProductReviewIntoDB = async (reviewId: string, payload: Review) => {
     const result = await prisma.review.update({
         where: {
-            id: pr.reviewId
+            id: parseInt(reviewId),
         },
         data: payload
     });
+
     return result;
 };
 
-const deleteProductReviewFromDB = async (reviewId: string, productId: string,) => {
-    const pr = await prisma.productReview.findUnique({
-        where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
+const deleteProductReviewFromDB = async (reviewId: string) => {
+    const result = await prisma.$transaction(async (transactionClient) => {
+        await transactionClient.review.delete({
+            where: {
+                id: parseInt(reviewId)
             }
-        }
-    });
-    if (!pr) {
-        throw new AppError(httpStatus.NOT_FOUND, "Can't find the product reivew!");
-    }
-    const updatedpr = await prisma.review.update({
-        where: {
-            id: pr.reviewId
-        },
-        data: {
-            isDeleted: true
-        }
-    });
-    return updatedpr;
+        })
+        await transactionClient.productReview.deleteMany({
+            where: {
+                reviewId: parseInt(reviewId)
+            }
+        })
+    })
+    return result
 };
 
 export const ProductReviewSerives = {

@@ -25,9 +25,9 @@ const getAllProductReview = catchAsync(async (req, res) => {
 });
 
 const getProductReview = catchAsync(async (req, res) => {
-    const { reviewId, productId } = req.params;
+    const { productId } = req.params;
 
-    const result = await ProductReviewSerives.getSingleProductReviewsFromDB(reviewId, productId);
+    const result = await ProductReviewSerives.getSingleProductReviewsFromDB(productId);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -36,9 +36,9 @@ const getProductReview = catchAsync(async (req, res) => {
     });
 });
 const updateProductReview = catchAsync(async (req, res) => {
-    const { reviewId, productId } = req.params;
+    const { reviewId } = req.params;
 
-    const result = await ProductReviewSerives.updateProductReviewIntoDB(reviewId, productId, req.body);
+    const result = await ProductReviewSerives.updateProductReviewIntoDB(reviewId, req.body);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -47,9 +47,9 @@ const updateProductReview = catchAsync(async (req, res) => {
     });
 });
 const deleteProductReview = catchAsync(async (req, res) => {
-    const { reviewId, productId } = req.params;
+    const { reviewId } = req.params;
 
-    const result = await ProductReviewSerives.deleteProductReviewFromDB(reviewId, productId );
+    const result = await ProductReviewSerives.deleteProductReviewFromDB(reviewId );
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,

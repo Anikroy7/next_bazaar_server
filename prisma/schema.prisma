@@ -131,35 +131,38 @@ model Review {
 }
 
 model ProductReview {
+  id            Int             @id @default(autoincrement())
   reviewId Int
   review   Review @relation(fields: [reviewId], references: [id])
 
   productId Int
   product   Product @relation(fields: [productId], references: [id])
 
-  @@id([reviewId, productId])
+  // @@id([reviewId, productId])
   @@map("productReviews")
 }
 
 model VendorReview {
+  id            Int             @id @default(autoincrement())
   reviewId Int
   review   Review @relation(fields: [reviewId], references: [id])
 
   vendorId Int
   vendor   Vendor @relation(fields: [vendorId], references: [id])
 
-  @@id([reviewId, vendorId])
+  // @@id([reviewId, vendorId])
   @@map("vendorReviews")
 }
 
 model VendorFollow {
+  id            Int             @id @default(autoincrement())
   vendorId Int
   vendor   Vendor @relation(fields: [vendorId], references: [id])
 
   customerId Int
   customer   Customer @relation(fields: [customerId], references: [id])
 
-  @@id([vendorId, customerId])
+  // @@id([vendorId, customerId])
 }
 
 model Order {

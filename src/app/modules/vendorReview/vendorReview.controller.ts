@@ -25,8 +25,8 @@ const getAllVendorReview = catchAsync(async (req, res) => {
 });
 
 const getVendorReview = catchAsync(async (req, res) => {
-    const { reviewId, vendorId } = req.params;
-    const result = await VendorReviewSerives.getSingleVendorReviewsFromDB(reviewId, vendorId);
+    const {  vendorId } = req.params;
+    const result = await VendorReviewSerives.getSingleVendorReviewsFromDB(vendorId);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -35,9 +35,9 @@ const getVendorReview = catchAsync(async (req, res) => {
     });
 });
 const updateVendorReview = catchAsync(async (req, res) => {
-    const { reviewId, vendorId } = req.params;
+    const { reviewId } = req.params;
 
-    const result = await VendorReviewSerives.updateVendorReviewIntoDB(reviewId, vendorId, req.body);
+    const result = await VendorReviewSerives.updateVendorReviewIntoDB(reviewId, req.body);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -46,9 +46,9 @@ const updateVendorReview = catchAsync(async (req, res) => {
     });
 });
 const deleteVendorReview = catchAsync(async (req, res) => {
-    const { reviewId, vendorId } = req.params;
+    const { reviewId } = req.params;
 
-    const result = await VendorReviewSerives.deleteVendorReviewFromDB(reviewId, vendorId);
+    const result = await VendorReviewSerives.deleteVendorReviewFromDB(reviewId);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,

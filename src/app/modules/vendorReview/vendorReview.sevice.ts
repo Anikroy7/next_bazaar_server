@@ -27,13 +27,10 @@ const getAllVendorReviewsFromDB = async () => {
     return result
 }
 
-const getSingleVendorReviewsFromDB = async (reviewId: string, vendorId: string) => {
-    const pr = await prisma.vendorReview.findUnique({
+const getSingleVendorReviewsFromDB = async ( vendorId: string) => {
+    const pr = await prisma.vendorReview.findMany({
         where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
-            }
+            vendorId: parseInt(vendorId)
         },
         include: {
             review: true
@@ -45,44 +42,31 @@ const getSingleVendorReviewsFromDB = async (reviewId: string, vendorId: string) 
     return pr;
 }
 
-const updateVendorReviewIntoDB = async (reviewId: string, vendorId: string, payload: Review) => {
-    const pr = await prisma.vendorReview.findUnique({
-        where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
-            }
-        }
-    });
-    if (!pr) {
-        throw new AppError(httpStatus.NOT_FOUND, "Can't find the vendor reivew!");
-    }
+const updateVendorReviewIntoDB = async (reviewId: string, payload: Review) => {
     const result = await prisma.review.update({
-        where: { id: pr.reviewId },
+        where: {
+            id: parseInt(reviewId),
+        },
         data: payload
     });
+
     return result;
 };
 
-const deleteVendorReviewFromDB = async (reviewId: string, vendorId: string) => {
-    const pr = await prisma.vendorReview.findUnique({
-        where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
+const deleteVendorReviewFromDB = async (reviewId: string) => {
+    const result = await prisma.$transaction(async (transactionClient) => {
+        await transactionClient.review.delete({
+            where: {
+                id: parseInt(reviewId)
             }
-        }
-    });
-    if (!pr) {
-        throw new AppError(httpStatus.NOT_FOUND, "Can't find the vendor reivew!");
-    }
-    const updatedpr = await prisma.review.update({
-        where: { id: pr.reviewId },
-        data: {
-            isDeleted: true
-        }
-    });
-    return updatedpr;
+        })
+        await transactionClient.productReview.deleteMany({
+            where: {
+                reviewId: parseInt(reviewId)
+            }
+        })
+    })
+    return result
 };
 
 export const VendorReviewSerives = {
