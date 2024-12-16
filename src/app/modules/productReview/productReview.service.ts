@@ -19,10 +19,11 @@ const createProductReviewIntoDB = async (payload: Review & ProductReview) => {
 }
 
 const getAllProductReviewsFromDB = async () => {
-    const result = await prisma.productReview.findMany({
+    const result = await prisma.review.findMany({
         include: {
-            review: true
-        }
+            customer: true,
+        },
+
     });
     return result
 }
@@ -33,12 +34,12 @@ const getSingleProductReviewsFromDB = async (productId: string) => {
         },
         include: {
             review: {
-                include:{
-                    customer:true
+                include: {
+                    customer: true
                 }
             },
         },
-        
+
     });
     if (!pr) {
         throw new AppError(httpStatus.NOT_FOUND, "Can't find the product reivew!");
@@ -59,14 +60,14 @@ const updateProductReviewIntoDB = async (reviewId: string, payload: Review) => {
 
 const deleteProductReviewFromDB = async (reviewId: string) => {
     const result = await prisma.$transaction(async (transactionClient) => {
-        await transactionClient.review.delete({
-            where: {
-                id: parseInt(reviewId)
-            }
-        })
         await transactionClient.productReview.deleteMany({
             where: {
                 reviewId: parseInt(reviewId)
+            }
+        })
+        await transactionClient.review.delete({
+            where: {
+                id: parseInt(reviewId)
             }
         })
     })
