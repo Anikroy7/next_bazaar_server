@@ -19,10 +19,14 @@ router.post(
 );
 
 router.get(
-  "/my-order", auth(UserRole.ADMIN, UserRole.CUSTOMER), auth(UserRole.ADMIN, UserRole.CUSTOMER), OrderControllers.getMySingleOrder,
+  "/my-order", auth(UserRole.ADMIN, UserRole.CUSTOMER), OrderControllers.getMySingleOrder,
+);
+router.get(
+  "/vendor-order/:vendorId", auth(UserRole.ADMIN, UserRole.VENDOR), OrderControllers.getVendorOrder,
 );
 
 router.get('/:orderId', OrderControllers.getOrder)
 router.patch('/:orderId', OrderControllers.updateOrder)
 
 export const OrderRoutes = router;
+  

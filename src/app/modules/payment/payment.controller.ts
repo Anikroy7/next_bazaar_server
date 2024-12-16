@@ -1,13 +1,37 @@
 import catchAsync from "../../utils/catchAsync";
 import { PaymentServices } from "./payment.service";
 import config from "../../config";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status";
+
+
+const getPayments = catchAsync(async (req, res) => {
+
+  const result = await PaymentServices.getPaymentsFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment retrived successfully",
+    data: result,
+  });
+});
+const cancelPaymentByAdmin = catchAsync(async (req, res) => {
+  const { orderId } = req.params;
+  const result = await PaymentServices.cancelOrderIntoDB(orderId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment cancel successfully",
+    data: result,
+  });
+});
 
 const createPayment = catchAsync(async (req, res) => {
   const orderId = req.query.orderId;
   const userId = req.query.userId;
   const tran_id = req.query.tran_id;
 
-  await PaymentServices.caretePaymentIntoDB({ orderId, userId, tran_id })
+  await PaymentServices.createPaymentIntoDB({ orderId, userId, tran_id })
   res.send(`
       
         <html>
@@ -124,5 +148,7 @@ const cancelPayment = catchAsync(async (req, res) => {
 
 export const PaymentController = {
   createPayment,
-  cancelPayment
+  cancelPayment,
+  getPayments,
+  cancelPaymentByAdmin
 }

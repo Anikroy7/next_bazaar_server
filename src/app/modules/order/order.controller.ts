@@ -35,6 +35,16 @@ const getMySingleOrder = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getVendorOrder = catchAsync(async (req, res) => {
+  const { vendorId } = req.params;
+  const result = await OrderServices.getVendorOrderFromDB(vendorId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Vendor orders retrived successfully",
+    data: result,
+  });
+});
 
 
 
@@ -79,5 +89,6 @@ export const OrderControllers = {
   getOrder,
   getMySingleOrder,
   getAllOrders,
-  updateOrder
+  updateOrder,
+  getVendorOrder
 };

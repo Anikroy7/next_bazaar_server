@@ -142,6 +142,30 @@ const getMyOrderFromDB = async (payload: any) => {
   }
 };
 
+const getVendorOrderFromDB = async (vendorId: string) => {
+  const allOrdersForVendor = await prisma.order.findMany({
+    where: {
+      vendorId: parseInt(vendorId)
+    },
+  });
+  if (allOrdersForVendor.length > 0) {
+    const orderIds = allOrdersForVendor.map((order) => order.id);
+    const paymentData = await prisma.payment.findMany({
+      where: {
+        orderId: {
+          in: orderIds,
+        },
+      },
+      include: {
+        order: true
+      }
+    });
+    return paymentData;
+  } else {
+    return [];
+  }
+};
+
 const getOrderFromDB = async (_id: string) => {
   const order = await prisma.order.findUnique({
     where: { id: parseInt(_id) }
@@ -173,5 +197,6 @@ export const OrderServices = {
   getMyOrderFromDB,
   getOrderFromDB,
   updateOrderIntoDB,
-  getAllOrdersFromDB
+  getAllOrdersFromDB,
+  getVendorOrderFromDB
 }

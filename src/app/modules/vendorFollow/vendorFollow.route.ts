@@ -8,8 +8,10 @@ import { VendorFollowController } from "./vendorFollow.controller";
 
 const router = express.Router();
 
-router.post('/add', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(vendorFollowValidationSchema), VendorFollowController.addVendorFollower)
+router.post('/isFollowed', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(vendorFollowValidationSchema), VendorFollowController.isFollowed);
 
-router.delete('/remove', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(vendorFollowValidationSchema), VendorFollowController.removeVendorFollower)
+router.post('/add', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(vendorFollowValidationSchema), VendorFollowController.addVendorFollower);
+
+router.post('/remove', auth(UserRole.ADMIN, UserRole.CUSTOMER), validateRequest(vendorFollowValidationSchema), VendorFollowController.removeVendorFollower)
 
 export const VendorFollowRoutes = router;

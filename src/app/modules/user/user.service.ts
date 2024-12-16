@@ -247,7 +247,8 @@ const getSingleVendorFromDB = async (id: string) => {
     })
     const vendorProducts = await prisma.product.findMany({
         where: {
-            vendorId: vendorInfo.id
+            vendorId: vendorInfo.id,
+            isDeleted:false
         },
         include:{
             vendor:true

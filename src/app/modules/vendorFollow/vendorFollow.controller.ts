@@ -5,11 +5,23 @@ import { VendorFollowServices } from "./vendorFollow.service";
 
 const addVendorFollower = catchAsync(async (req, res) => {
     const vendorFollowData = req.body;
+
     const result = await VendorFollowServices.addFollowersIntoDB(vendorFollowData)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Vendor follower added successfully",
+        data: result,
+    });
+});
+const isFollowed = catchAsync(async (req, res) => {
+    const vendorFollowData = req.body;
+
+    const result = await VendorFollowServices.isFollowedFromDB(vendorFollowData)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Is followed data",
         data: result,
     });
 });
@@ -26,5 +38,6 @@ const removeVendorFollower = catchAsync(async (req, res) => {
 
 export const VendorFollowController = {
     addVendorFollower,
-    removeVendorFollower
+    removeVendorFollower,
+    isFollowed
 };

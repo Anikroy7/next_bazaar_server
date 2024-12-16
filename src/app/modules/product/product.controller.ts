@@ -2,6 +2,7 @@ import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { ProductServices } from "./product.service";
 import httpStatus from "http-status";
+import { prisma } from "../../types/global";
 
 
 const createProduct = catchAsync(async (req, res) => {
@@ -17,7 +18,7 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-  const {vendorId}= req.query;
+  const { vendorId } = req.query;
   const result = await ProductServices.getProductsFromDB(vendorId as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -53,13 +54,30 @@ const updateProduct = catchAsync(async (req, res) => {
 
 const deleteProduct = catchAsync(async (req, res) => {
   const { id } = req.params;
- await ProductServices.deleteProductFromDB(id);
+  await ProductServices.deleteProductFromDB(id);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "Products deleted successfully",
   });
 });
+
+//! temp
+const insertMany = catchAsync(async (req, res) => {
+  console.log('may',req.body)
+  const newProduct = await prisma.product.createMany({
+    data: req.body, // The array of products to insert
+  });
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Products many successfully",
+    data: newProduct,
+  });
+});
+
+
+//! temp
 
 
 
@@ -69,5 +87,6 @@ export const ProductControllers = {
   updateProduct,
   deleteProduct,
   getSingleProduct,
+  insertMany
 
 };

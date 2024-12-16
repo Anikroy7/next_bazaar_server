@@ -32,8 +32,13 @@ const getSingleProductReviewsFromDB = async (productId: string) => {
             productId: parseInt(productId)
         },
         include: {
-            review: true
-        }
+            review: {
+                include:{
+                    customer:true
+                }
+            },
+        },
+        
     });
     if (!pr) {
         throw new AppError(httpStatus.NOT_FOUND, "Can't find the product reivew!");

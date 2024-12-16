@@ -17,6 +17,15 @@ router.post(
   validateRequest(createProductValidationSchema),
   ProductControllers.createProduct
 );
+//!TEMP
+router.post(
+  "/many",
+  
+  ProductControllers.insertMany
+);
+//!TEMP
+
+
 router.get("/", ProductControllers.getProducts);
 
 router.get("/:id",

@@ -25,18 +25,18 @@ router.get('/me',
   auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR),
   UserControllers.getMyInfo
 )
-router.get('/vendor/:id',
-  UserControllers.getSingleVendor
+router.get('/vendor/all',
+  auth(UserRole.ADMIN),
+  UserControllers.getAllVendorInfo
 )
+
+
 router.get('/cutomer/all',
   auth(UserRole.ADMIN),
   UserControllers.getAllCustomerInfo
 )
 
-router.get('/vendor/all',
-  auth(UserRole.ADMIN),
-  UserControllers.getAllVendorInfo
-)
+
 
 
 
@@ -57,6 +57,9 @@ router.patch('/update-customer',
   UserControllers.updateCustomer
 )
 
+router.get('/vendor/:id',
+  UserControllers.getSingleVendor
+)
 
 router.patch('/update-vendor/:id',
   auth(UserRole.ADMIN),
