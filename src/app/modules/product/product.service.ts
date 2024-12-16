@@ -1,7 +1,88 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
-import { prisma } from "../../types/global";
-import { Product } from "@prisma/client";
+import { IPaginationOptions, prisma, TProductFilterableFields } from "../../types/global";
+import { Prisma, Product } from "@prisma/client";
+import { productSearchAbleFields } from "./product.constant";
+import { paginationHelper } from "../../utils/paginationHelpers";
+
+
+
+const getProductsFromDB = async (params: TProductFilterableFields, options: IPaginationOptions) => {
+  const { searchTerm, priceRange, ...filterData } = params;
+  const { page, limit, skip } = paginationHelper.calculatePagination(options);
+  const andCondions: Prisma.ProductWhereInput[] = [];
+  if (searchTerm) {
+    andCondions.push({
+      OR: productSearchAbleFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive'
+        }
+      }))
+    })
+  };
+
+  if (priceRange) {
+    andCondions.push({
+      OR: [{
+        price: {
+          lte: parseInt(priceRange),
+        }
+      }]
+    })
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andCondions.push({
+      AND: Object.keys(filterData).map(key => ({
+        [key]: {
+          equals: parseInt((filterData as any)[key])
+        }
+      }))
+    })
+  };
+  andCondions.push({
+    isDeleted: falsegit ad
+  })
+  const whereConditons: Prisma.ProductWhereInput = { AND: andCondions }
+
+  const result = await prisma.product.findMany({
+    where: whereConditons,
+    skip,
+    take: limit,
+    orderBy: options.sortBy && options.sortOrder ? {
+      [options.sortBy]: options.sortOrder
+    } : {
+      createdAt: 'desc'
+    },
+    include: {
+      category: true
+    }
+
+  });
+
+
+  const total = await prisma.product.count({
+    where: whereConditons
+  });
+
+  return {
+    meta: {
+      page,
+      limit,
+      total
+    },
+    data: result
+  };
+
+};
+
+
+
+
+
+
+
 
 const createProductIntoDB = async (payload: Product) => {
   const newProduct = await prisma.product.create({
@@ -13,24 +94,7 @@ const createProductIntoDB = async (payload: Product) => {
   return newProduct;
 };
 
-const getProductsFromDB = async (vendorId: string) => {
-  const numberVendorId = parseInt(vendorId)
-  const products = await prisma.product.findMany({
-    where: {
-      isDeleted: false,
-      ...(numberVendorId && { vendorId: numberVendorId })
-    },
-    include: {
-      vendor: true
-    }
-  });
 
-  if (products.length === 0) {
-    throw new AppError(httpStatus.BAD_REQUEST, "There are not products here");
-  }
-  return products;
-  ;
-};
 
 const getSingleProductFromDB = async (_id: string) => {
   const product = await prisma.product.findUnique({
@@ -83,6 +147,9 @@ const deleteProductFromDB = async (_id: string) => {
     data: { isDeleted: true }
   });
 };
+
+
+
 
 
 export const ProductServices = {

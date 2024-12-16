@@ -3,6 +3,8 @@ import catchAsync from "../../utils/catchAsync";
 import { ProductServices } from "./product.service";
 import httpStatus from "http-status";
 import { prisma } from "../../types/global";
+import pick from "../../utils/pick";
+import { productFilterableFields } from "./product.constant";
 
 
 const createProduct = catchAsync(async (req, res) => {
@@ -18,8 +20,10 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-  const { vendorId } = req.query;
-  const result = await ProductServices.getProductsFromDB(vendorId as string);
+
+  const filters = pick(req.query, productFilterableFields);
+  const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder'])
+  const result = await ProductServices.getProductsFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -64,7 +68,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 
 //! temp
 const insertMany = catchAsync(async (req, res) => {
-  console.log('may',req.body)
+  console.log('may', req.body)
   const newProduct = await prisma.product.createMany({
     data: req.body, // The array of products to insert
   });
