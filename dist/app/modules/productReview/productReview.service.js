@@ -42,71 +42,54 @@ const createProductReviewIntoDB = (payload) => __awaiter(void 0, void 0, void 0,
     return result;
 });
 const getAllProductReviewsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield global_1.prisma.productReview.findMany({
+    const result = yield global_1.prisma.review.findMany({
         include: {
-            review: true
-        }
+            customer: true,
+        },
     });
     return result;
 });
-const getSingleProductReviewsFromDB = (reviewId, productId) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.productReview.findUnique({
+const getSingleProductReviewsFromDB = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    const pr = yield global_1.prisma.productReview.findMany({
         where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
-            }
+            productId: parseInt(productId)
         },
         include: {
-            review: true
-        }
+            review: {
+                include: {
+                    customer: true
+                }
+            },
+        },
     });
     if (!pr) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Can't find the product reivew!");
     }
     return pr;
 });
-const updateProductReviewIntoDB = (reviewId, productId, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.productReview.findUnique({
-        where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
-            }
-        }
-    });
-    if (!pr) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Can't find the product reivew!");
-    }
+const updateProductReviewIntoDB = (reviewId, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield global_1.prisma.review.update({
         where: {
-            id: pr.reviewId
+            id: parseInt(reviewId),
         },
         data: payload
     });
     return result;
 });
-const deleteProductReviewFromDB = (reviewId, productId) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.productReview.findUnique({
-        where: {
-            reviewId_productId: {
-                reviewId: parseInt(reviewId),
-                productId: parseInt(productId)
+const deleteProductReviewFromDB = (reviewId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield global_1.prisma.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        yield transactionClient.productReview.deleteMany({
+            where: {
+                reviewId: parseInt(reviewId)
             }
-        }
-    });
-    if (!pr) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Can't find the product reivew!");
-    }
-    const updatedpr = yield global_1.prisma.review.update({
-        where: {
-            id: pr.reviewId
-        },
-        data: {
-            isDeleted: true
-        }
-    });
-    return updatedpr;
+        });
+        yield transactionClient.review.delete({
+            where: {
+                id: parseInt(reviewId)
+            }
+        });
+    }));
+    return result;
 });
 exports.ProductReviewSerives = {
     getAllProductReviewsFromDB,

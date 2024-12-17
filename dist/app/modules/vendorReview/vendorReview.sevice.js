@@ -49,13 +49,10 @@ const getAllVendorReviewsFromDB = () => __awaiter(void 0, void 0, void 0, functi
     });
     return result;
 });
-const getSingleVendorReviewsFromDB = (reviewId, vendorId) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.vendorReview.findUnique({
+const getSingleVendorReviewsFromDB = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
+    const pr = yield global_1.prisma.vendorReview.findMany({
         where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
-            }
+            vendorId: parseInt(vendorId)
         },
         include: {
             review: true
@@ -66,43 +63,29 @@ const getSingleVendorReviewsFromDB = (reviewId, vendorId) => __awaiter(void 0, v
     }
     return pr;
 });
-const updateVendorReviewIntoDB = (reviewId, vendorId, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.vendorReview.findUnique({
-        where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
-            }
-        }
-    });
-    if (!pr) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Can't find the vendor reivew!");
-    }
+const updateVendorReviewIntoDB = (reviewId, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield global_1.prisma.review.update({
-        where: { id: pr.reviewId },
+        where: {
+            id: parseInt(reviewId),
+        },
         data: payload
     });
     return result;
 });
-const deleteVendorReviewFromDB = (reviewId, vendorId) => __awaiter(void 0, void 0, void 0, function* () {
-    const pr = yield global_1.prisma.vendorReview.findUnique({
-        where: {
-            reviewId_vendorId: {
-                reviewId: parseInt(reviewId),
-                vendorId: parseInt(vendorId)
+const deleteVendorReviewFromDB = (reviewId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield global_1.prisma.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        yield transactionClient.review.delete({
+            where: {
+                id: parseInt(reviewId)
             }
-        }
-    });
-    if (!pr) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Can't find the vendor reivew!");
-    }
-    const updatedpr = yield global_1.prisma.review.update({
-        where: { id: pr.reviewId },
-        data: {
-            isDeleted: true
-        }
-    });
-    return updatedpr;
+        });
+        yield transactionClient.productReview.deleteMany({
+            where: {
+                reviewId: parseInt(reviewId)
+            }
+        });
+    }));
+    return result;
 });
 exports.VendorReviewSerives = {
     getAllVendorReviewsFromDB,

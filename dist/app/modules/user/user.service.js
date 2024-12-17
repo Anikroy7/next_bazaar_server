@@ -242,7 +242,8 @@ const getSingleVendorFromDB = (id) => __awaiter(void 0, void 0, void 0, function
     });
     const vendorProducts = yield global_1.prisma.product.findMany({
         where: {
-            vendorId: vendorInfo.id
+            vendorId: vendorInfo.id,
+            isDeleted: false
         },
         include: {
             vendor: true

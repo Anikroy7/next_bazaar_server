@@ -12,6 +12,9 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const client_1 = require("@prisma/client");
 const router = express_1.default.Router();
 router.post("/", (0, auth_1.default)(client_1.UserRole.VENDOR, client_1.UserRole.ADMIN), (0, validateRequest_1.default)(product_validation_1.createProductValidationSchema), product_controller_1.ProductControllers.createProduct);
+//!TEMP
+router.post("/many", product_controller_1.ProductControllers.insertMany);
+//!TEMP
 router.get("/", product_controller_1.ProductControllers.getProducts);
 router.get("/:id", product_controller_1.ProductControllers.getSingleProduct);
 router.patch("/:id", (0, auth_1.default)(client_1.UserRole.VENDOR, client_1.UserRole.ADMIN), (0, validateRequest_1.default)(product_validation_1.updateProductValidationSchema), product_controller_1.ProductControllers.updateProduct);

@@ -37,8 +37,8 @@ const getAllVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const getVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, vendorId } = req.params;
-    const result = yield vendorReview_sevice_1.VendorReviewSerives.getSingleVendorReviewsFromDB(reviewId, vendorId);
+    const { vendorId } = req.params;
+    const result = yield vendorReview_sevice_1.VendorReviewSerives.getSingleVendorReviewsFromDB(vendorId);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -47,8 +47,8 @@ const getVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 const updateVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, vendorId } = req.params;
-    const result = yield vendorReview_sevice_1.VendorReviewSerives.updateVendorReviewIntoDB(reviewId, vendorId, req.body);
+    const { reviewId } = req.params;
+    const result = yield vendorReview_sevice_1.VendorReviewSerives.updateVendorReviewIntoDB(reviewId, req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -57,8 +57,8 @@ const updateVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const deleteVendorReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, vendorId } = req.params;
-    const result = yield vendorReview_sevice_1.VendorReviewSerives.deleteVendorReviewFromDB(reviewId, vendorId);
+    const { reviewId } = req.params;
+    const result = yield vendorReview_sevice_1.VendorReviewSerives.deleteVendorReviewFromDB(reviewId);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

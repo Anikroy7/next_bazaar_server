@@ -12,7 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentServices = void 0;
 const client_1 = require("@prisma/client");
 const global_1 = require("../../types/global");
-const caretePaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const getPaymentsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield global_1.prisma.payment.findMany({
+        include: {
+            order: true
+        }
+    });
+    return result;
+});
+const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     yield global_1.prisma.payment.create({
         data: {
             orderId: parseInt(payload.orderId),
@@ -22,16 +30,25 @@ const caretePaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 const cancelOrderIntoDB = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
-    yield global_1.prisma.orderProduct.deleteMany({
-        where: {
-            orderId: parseInt(orderId)
-        }
-    });
-    yield global_1.prisma.order.delete({
-        where: { id: parseInt(orderId) }
-    });
+    const result = yield global_1.prisma.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        yield transactionClient.orderProduct.deleteMany({
+            where: {
+                orderId: parseInt(orderId)
+            }
+        });
+        yield transactionClient.payment.delete({
+            where: {
+                orderId: parseInt(orderId)
+            }
+        });
+        yield transactionClient.order.delete({
+            where: { id: parseInt(orderId) }
+        });
+    }));
+    return result;
 });
 exports.PaymentServices = {
-    caretePaymentIntoDB,
-    cancelOrderIntoDB
+    createPaymentIntoDB,
+    cancelOrderIntoDB,
+    getPaymentsFromDB
 };

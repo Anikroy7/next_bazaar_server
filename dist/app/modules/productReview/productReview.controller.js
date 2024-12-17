@@ -37,8 +37,8 @@ const getAllProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 const getProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, productId } = req.params;
-    const result = yield productReview_service_1.ProductReviewSerives.getSingleProductReviewsFromDB(reviewId, productId);
+    const { productId } = req.params;
+    const result = yield productReview_service_1.ProductReviewSerives.getSingleProductReviewsFromDB(productId);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -47,8 +47,8 @@ const getProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const updateProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, productId } = req.params;
-    const result = yield productReview_service_1.ProductReviewSerives.updateProductReviewIntoDB(reviewId, productId, req.body);
+    const { reviewId } = req.params;
+    const result = yield productReview_service_1.ProductReviewSerives.updateProductReviewIntoDB(reviewId, req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -57,8 +57,8 @@ const updateProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 const deleteProductReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { reviewId, productId } = req.params;
-    const result = yield productReview_service_1.ProductReviewSerives.deleteProductReviewFromDB(reviewId, productId);
+    const { reviewId } = req.params;
+    const result = yield productReview_service_1.ProductReviewSerives.deleteProductReviewFromDB(reviewId);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

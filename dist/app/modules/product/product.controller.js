@@ -17,6 +17,9 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const product_service_1 = require("./product.service");
 const http_status_1 = __importDefault(require("http-status"));
+const global_1 = require("../../types/global");
+const pick_1 = __importDefault(require("../../utils/pick"));
+const product_constant_1 = require("./product.constant");
 const createProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const productData = req.body;
     const result = yield product_service_1.ProductServices.createProductIntoDB(productData);
@@ -28,8 +31,9 @@ const createProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { vendorId } = req.query;
-    const result = yield product_service_1.ProductServices.getProductsFromDB(vendorId);
+    const filters = (0, pick_1.default)(req.query, product_constant_1.productFilterableFields);
+    const options = (0, pick_1.default)(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+    const result = yield product_service_1.ProductServices.getProductsFromDB(filters, options);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -67,10 +71,25 @@ const deleteProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         message: "Products deleted successfully",
     });
 }));
+//! temp
+const insertMany = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('may', req.body);
+    const newProduct = yield global_1.prisma.product.createMany({
+        data: req.body, // The array of products to insert
+    });
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: "Products many successfully",
+        data: newProduct,
+    });
+}));
+//! temp
 exports.ProductControllers = {
     createProduct,
     getProducts,
     updateProduct,
     deleteProduct,
     getSingleProduct,
+    insertMany
 };

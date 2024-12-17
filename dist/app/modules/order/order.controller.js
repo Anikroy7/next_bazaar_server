@@ -47,6 +47,16 @@ const getMySingleOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const getVendorOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { vendorId } = req.params;
+    const result = yield order_service_1.OrderServices.getVendorOrderFromDB(vendorId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Vendor orders retrived successfully",
+        data: result,
+    });
+}));
 const getOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { orderId } = req.params;
     const result = yield order_service_1.OrderServices.getOrderFromDB(orderId);
@@ -82,5 +92,6 @@ exports.OrderControllers = {
     getOrder,
     getMySingleOrder,
     getAllOrders,
-    updateOrder
+    updateOrder,
+    getVendorOrder
 };

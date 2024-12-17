@@ -133,6 +133,30 @@ const getMyOrderFromDB = (payload) => __awaiter(void 0, void 0, void 0, function
         return [];
     }
 });
+const getVendorOrderFromDB = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
+    const allOrdersForVendor = yield global_1.prisma.order.findMany({
+        where: {
+            vendorId: parseInt(vendorId)
+        },
+    });
+    if (allOrdersForVendor.length > 0) {
+        const orderIds = allOrdersForVendor.map((order) => order.id);
+        const paymentData = yield global_1.prisma.payment.findMany({
+            where: {
+                orderId: {
+                    in: orderIds,
+                },
+            },
+            include: {
+                order: true
+            }
+        });
+        return paymentData;
+    }
+    else {
+        return [];
+    }
+});
 const getOrderFromDB = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const order = yield global_1.prisma.order.findUnique({
         where: { id: parseInt(_id) }
@@ -160,5 +184,6 @@ exports.OrderServices = {
     getMyOrderFromDB,
     getOrderFromDB,
     updateOrderIntoDB,
-    getAllOrdersFromDB
+    getAllOrdersFromDB,
+    getVendorOrderFromDB
 };

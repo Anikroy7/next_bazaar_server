@@ -27,6 +27,16 @@ const addVendorFollower = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const isFollowed = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const vendorFollowData = req.body;
+    const result = yield vendorFollow_service_1.VendorFollowServices.isFollowedFromDB(vendorFollowData);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Is followed data",
+        data: result,
+    });
+}));
 const removeVendorFollower = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const vendorFollowData = req.body;
     const result = yield vendorFollow_service_1.VendorFollowServices.removeFollowersIntoDB(vendorFollowData);
@@ -39,5 +49,6 @@ const removeVendorFollower = (0, catchAsync_1.default)((req, res) => __awaiter(v
 }));
 exports.VendorFollowController = {
     addVendorFollower,
-    removeVendorFollower
+    removeVendorFollower,
+    isFollowed
 };

@@ -13,7 +13,21 @@ exports.VendorFollowServices = void 0;
 const global_1 = require("../../types/global");
 const addFollowersIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield global_1.prisma.vendorFollow.create({
-        data: payload
+        data: {
+            vendorId: payload.vendorId,
+            customerId: payload.customerId,
+        },
+    });
+    return result;
+});
+const isFollowedFromDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield global_1.prisma.vendorFollow.findUnique({
+        where: {
+            vendorId_customerId: {
+                customerId: payload.customerId,
+                vendorId: payload.vendorId
+            }
+        }
     });
     return result;
 });
@@ -30,5 +44,6 @@ const removeFollowersIntoDB = (payload) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.VendorFollowServices = {
     addFollowersIntoDB,
-    removeFollowersIntoDB
+    removeFollowersIntoDB,
+    isFollowedFromDB
 };

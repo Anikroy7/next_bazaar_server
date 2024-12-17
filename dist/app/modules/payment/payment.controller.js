@@ -16,11 +16,32 @@ exports.PaymentController = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const payment_service_1 = require("./payment.service");
 const config_1 = __importDefault(require("../../config"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const http_status_1 = __importDefault(require("http-status"));
+const getPayments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield payment_service_1.PaymentServices.getPaymentsFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment retrived successfully",
+        data: result,
+    });
+}));
+const cancelPaymentByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const result = yield payment_service_1.PaymentServices.cancelOrderIntoDB(orderId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment cancel successfully",
+        data: result,
+    });
+}));
 const createPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const orderId = req.query.orderId;
     const userId = req.query.userId;
     const tran_id = req.query.tran_id;
-    yield payment_service_1.PaymentServices.caretePaymentIntoDB({ orderId, userId, tran_id });
+    yield payment_service_1.PaymentServices.createPaymentIntoDB({ orderId, userId, tran_id });
     res.send(`
       
         <html>
@@ -134,5 +155,7 @@ const cancelPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 exports.PaymentController = {
     createPayment,
-    cancelPayment
+    cancelPayment,
+    getPayments,
+    cancelPaymentByAdmin
 };
