@@ -20,7 +20,6 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-
   const filters = pick(req.query, productFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder'])
   const result = await ProductServices.getProductsFromDB(filters, options);

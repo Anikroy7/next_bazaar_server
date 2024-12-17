@@ -42,7 +42,7 @@ const getProductsFromDB = async (params: TProductFilterableFields, options: IPag
     })
   };
   andCondions.push({
-    isDeleted: falsegit ad
+    isDeleted: false
   })
   const whereConditons: Prisma.ProductWhereInput = { AND: andCondions }
 
