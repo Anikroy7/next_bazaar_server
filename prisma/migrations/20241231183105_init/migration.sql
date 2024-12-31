@@ -110,18 +110,20 @@ CREATE TABLE "reviews" (
 
 -- CreateTable
 CREATE TABLE "productReviews" (
+    "id" SERIAL NOT NULL,
     "reviewId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
 
-    CONSTRAINT "productReviews_pkey" PRIMARY KEY ("reviewId","productId")
+    CONSTRAINT "productReviews_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "vendorReviews" (
+    "id" SERIAL NOT NULL,
     "reviewId" INTEGER NOT NULL,
     "vendorId" INTEGER NOT NULL,
 
-    CONSTRAINT "vendorReviews_pkey" PRIMARY KEY ("reviewId","vendorId")
+    CONSTRAINT "vendorReviews_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -170,6 +172,27 @@ CREATE TABLE "Payment" (
     CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Cupon" (
+    "id" SERIAL NOT NULL,
+    "code" TEXT NOT NULL,
+    "discountAmount" INTEGER NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Cupon_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CuponProduct" (
+    "id" SERIAL NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "cuponId" INTEGER NOT NULL,
+
+    CONSTRAINT "CuponProduct_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -184,6 +207,9 @@ CREATE UNIQUE INDEX "customers_email_key" ON "customers"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_orderId_key" ON "Payment"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cupon_code_key" ON "Cupon"("code");
 
 -- AddForeignKey
 ALTER TABLE "admins" ADD CONSTRAINT "admins_email_fkey" FOREIGN KEY ("email") REFERENCES "users"("email") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -235,3 +261,9 @@ ALTER TABLE "OrderProduct" ADD CONSTRAINT "OrderProduct_productId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "Payment" ADD CONSTRAINT "Payment_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CuponProduct" ADD CONSTRAINT "CuponProduct_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CuponProduct" ADD CONSTRAINT "CuponProduct_cuponId_fkey" FOREIGN KEY ("cuponId") REFERENCES "Cupon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

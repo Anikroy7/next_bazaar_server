@@ -111,6 +111,7 @@ model Product {
   updatedAt     DateTime        @updatedAt
   productReview ProductReview[]
   orderProduct  OrderProduct[]
+  cuponProduct  CuponProduct[]
 
   @@map("products")
 }
@@ -200,6 +201,25 @@ model Payment {
   transactionId String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+}
+
+model Cupon {
+  id             Int            @id @default(autoincrement())
+  code           String         @unique
+  discountAmount Int
+  isActive       Boolean
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  cuponProduct   CuponProduct[]
+}
+
+model CuponProduct {
+  id        Int @id @default(autoincrement())
+  productId Int
+  cuponId   Int
+
+  product Product @relation(fields: [productId], references: [id])
+  cupon   Cupon   @relation(fields: [cuponId], references: [id])
 }
 
 enum PaymentStatus {
