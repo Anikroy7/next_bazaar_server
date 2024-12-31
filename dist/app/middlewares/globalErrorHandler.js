@@ -30,7 +30,7 @@ const globalErrorHandler = (err, req, res, next) => {
     }
     else if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2002') {
-            message = "User already exits with this email!!";
+            message = err.name;
             error = err.meta;
         }
         if (err.code === 'P2002') {
