@@ -11,6 +11,7 @@ const vendorFollow_route_1 = require("../modules/vendorFollow/vendorFollow.route
 const order_route_1 = require("../modules/order/order.route");
 const payment_route_1 = require("../modules/payment/payment.route");
 const cupon_route_1 = require("../modules/cupon/cupon.route");
+const newsLetter_route_1 = require("../modules/newsletter/newsLetter.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -52,6 +53,10 @@ const moduleRoutes = [
     {
         path: "/cupons",
         route: cupon_route_1.CuponRoutes,
+    },
+    {
+        path: "/newsLetters",
+        route: newsLetter_route_1.LetterRoutes,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

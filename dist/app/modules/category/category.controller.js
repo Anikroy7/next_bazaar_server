@@ -17,6 +17,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const category_service_1 = require("./category.service");
+const global_1 = require("../../types/global");
 const createCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const categoryData = req.body;
     const result = yield category_service_1.CategoryServices.createCategoryIntoDB(categoryData);
@@ -66,10 +67,25 @@ const getAllCategories = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+//! temp
+const insertMany = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('catetg', req.body);
+    const newProduct = yield global_1.prisma.category.createMany({
+        data: req.body, // The array of products to insert
+    });
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: "Category many successfully",
+        data: newProduct,
+    });
+}));
+//! temp
 exports.CategoryControllers = {
     createCategory,
     deleteCategory,
     getAllCategories,
     getCategory,
-    updateCategory
+    updateCategory,
+    insertMany
 };

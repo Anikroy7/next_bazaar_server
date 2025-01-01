@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { CategoryServices } from "./category.service";
+import { prisma } from "../../types/global";
 
 const createCategory = catchAsync(async (req, res) => {
     const categoryData = req.body;
@@ -56,10 +57,29 @@ const getAllCategories = catchAsync(async (req, res) => {
     });
 });
 
+
+//! temp
+const insertMany = catchAsync(async (req, res) => {
+    console.log('catetg', req.body)
+    const newProduct = await prisma.category.createMany({
+      data: req.body, // The array of products to insert
+    });
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Category many successfully",
+      data: newProduct,
+    });
+  });
+  
+  
+  //! temp
+
 export const CategoryControllers = {
     createCategory,
     deleteCategory,
     getAllCategories,
     getCategory,
-    updateCategory
+    updateCategory,
+    insertMany
 };

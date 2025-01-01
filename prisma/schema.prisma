@@ -222,6 +222,13 @@ model CuponProduct {
   cupon   Cupon   @relation(fields: [cuponId], references: [id])
 }
 
+model NewsLetter {
+  id    Int @id @default(autoincrement())
+  email String @unique
+
+  @@map("newsLetters")
+}
+
 enum PaymentStatus {
   PENDING
   FAILED

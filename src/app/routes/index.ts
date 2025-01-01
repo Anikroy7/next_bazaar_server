@@ -9,6 +9,7 @@ import { VendorFollowRoutes } from "../modules/vendorFollow/vendorFollow.route";
 import { OrderRoutes } from "../modules/order/order.route";
 import { PaymentRoutes } from "../modules/payment/payment.route";
 import { CuponRoutes } from "../modules/cupon/cupon.route";
+import { LetterRoutes } from "../modules/newsletter/newsLetter.route";
 
 
 
@@ -54,6 +55,10 @@ const moduleRoutes = [
   {
     path: "/cupons",
     route: CuponRoutes,
+  },
+  {
+    path: "/newsLetters",
+    route: LetterRoutes,
   },
     
 ];

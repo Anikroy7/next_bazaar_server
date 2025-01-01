@@ -14,4 +14,7 @@ router.post('/', (0, auth_1.default)(client_1.UserRole.ADMIN), category_controll
 router.patch('/:categoryId', (0, auth_1.default)(client_1.UserRole.ADMIN), category_controller_1.CategoryControllers.updateCategory);
 router.get('/:categoryId', category_controller_1.CategoryControllers.getCategory);
 router.delete('/:categoryId', (0, auth_1.default)(client_1.UserRole.ADMIN), category_controller_1.CategoryControllers.deleteCategory);
+//!TEMP
+router.post("/many", category_controller_1.CategoryControllers.insertMany);
+//!TEMP
 exports.CategoryRoutes = router;

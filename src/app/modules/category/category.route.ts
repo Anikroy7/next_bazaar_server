@@ -11,4 +11,12 @@ router.patch('/:categoryId', auth(UserRole.ADMIN), CategoryControllers.updateCat
 router.get('/:categoryId', CategoryControllers.getCategory)
 router.delete('/:categoryId', auth(UserRole.ADMIN), CategoryControllers.deleteCategory)
 
+//!TEMP
+router.post(
+    "/many",
+
+    CategoryControllers.insertMany
+);
+//!TEMP
+
 export const CategoryRoutes = router;
