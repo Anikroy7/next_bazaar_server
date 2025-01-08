@@ -26,7 +26,6 @@ router.get('/me',
   UserControllers.getMyInfo
 )
 router.get('/vendor/all',
-  auth(UserRole.ADMIN),
   UserControllers.getAllVendorInfo
 )
 

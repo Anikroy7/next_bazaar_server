@@ -17,7 +17,7 @@ router.post('/create-admin',
 router.post('/create-vendor', (0, validateRequest_1.default)(user_validation_1.createVendorValidationSchema), user_controller_1.UserControllers.createVendor);
 router.post('/create-customer', (0, validateRequest_1.default)(user_validation_1.createCustomerValidationSchema), user_controller_1.UserControllers.createCustomer);
 router.get('/me', (0, auth_1.default)(client_1.UserRole.ADMIN, client_1.UserRole.CUSTOMER, client_1.UserRole.VENDOR), user_controller_1.UserControllers.getMyInfo);
-router.get('/vendor/all', (0, auth_1.default)(client_1.UserRole.ADMIN), user_controller_1.UserControllers.getAllVendorInfo);
+router.get('/vendor/all', user_controller_1.UserControllers.getAllVendorInfo);
 router.get('/cutomer/all', (0, auth_1.default)(client_1.UserRole.ADMIN), user_controller_1.UserControllers.getAllCustomerInfo);
 router.patch('/update-admin', (0, auth_1.default)(client_1.UserRole.ADMIN), (0, validateRequest_1.default)(user_validation_1.updateAdminValidationSchema), user_controller_1.UserControllers.updateAdmin);
 router.patch('/update-vendor', (0, auth_1.default)(client_1.UserRole.ADMIN, client_1.UserRole.VENDOR), (0, validateRequest_1.default)(user_validation_1.updateVendorValidationSchema), user_controller_1.UserControllers.updateVendor);
